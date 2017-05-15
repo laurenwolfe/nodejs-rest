@@ -16,5 +16,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.static('public'));
 
+app.listen(3000, function () {
+    console.log('Running!!')
+});
+
 module.exports = app;
 
