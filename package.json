@@ -1,15 +1,18 @@
 {
-  "name": "node-rest",
+  "name": "sbnodeserver",
   "version": "1.0.0",
-  "description": "node restful api for cse 442",
-  "main": "index.js",
+  "description": "442 Data Vis Project RESTful API",
+  "license": "MIT",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "http://git.heroku.com/sbnodeserver.git"
+    "start": "node server.js"
   },
   "author": "Lauren Wolfe",
-  "license": "ISC"
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "pg-promise": "^5.7.0"
+  },
+  "repository": "https://git.heroku.com/sbnodeserver.git"
 }
