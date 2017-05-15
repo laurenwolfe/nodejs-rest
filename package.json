@@ -1,0 +1,15 @@
+{
+  "name": "node-rest",
+  "version": "1.0.0",
+  "description": "node restful api for cse 442",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://git.heroku.com/sbnodeserver.git"
+  },
+  "author": "Lauren Wolfe",
+  "license": "ISC"
+}
