@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var index = require('./routes/index');
+var index = require('./routes/index.js');
 
 var app = express();
 
@@ -19,4 +19,3 @@ app.listen(5000, function () {
 });
 
 module.exports = app;
-
