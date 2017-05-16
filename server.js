@@ -15,13 +15,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(index);
 app.use(express.static('public'));
 
-/*
-app.get('/', function (req, res, next) {
-    console.log("hit / !");
-    next()
-});
-*/
-
 router.use(function(req, res, next) {
     console.log('%s %s %s', req.method, req.url, req.path);
     next();

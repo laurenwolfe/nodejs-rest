@@ -10,7 +10,13 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/sp
 var db = pgp(connectionString);
 
 function listAllReports(req, res, next) {
-    db.any('select * from spd_911_reports')
+    var limit = req['limit'];
+    var offset = req['offset'];
+    if(!limit) { limit = 1000 };
+    if(!offset) { offset  = 0 };
+
+    db.any('SELECT * FROM spd_911_reports ' +
+        'ORDER BY event_date DESC LIMIT $1 OFFSET $2', [limit, offset])
         .then(function (data) {
             res.status(200).json({
                     status: 'success',
@@ -29,7 +35,14 @@ function filterReportsByMonth(req, res, next) {
     var endTimestamp = req.params['end_year'] + "-"
         + req.params['end_month'] + "-31 23:59:59";
 
-    db.any('SELECT * FROM spd_911_reports WHERE event_date BETWEEN $1 AND $2', [startTimestamp, endTimestamp])
+    var limit = req['limit'];
+    var offset = req['offset'];
+    if(!limit) { limit = 1000 }
+    if(!offset) { offset  = 0 }
+
+    db.any('SELECT * FROM spd_911_reports ' +
+        'WHERE event_date BETWEEN $1 AND $2' +
+        'ORDER BY event_date DESC LIMIT $3 OFFSET $4', [startTimestamp, endTimestamp, limit, offset])
         .then(function (data) {
             res.status(200).json({
                 status: 'success',
@@ -42,11 +55,19 @@ function filterReportsByMonth(req, res, next) {
     });
 }
 
+
 function listReportsSinceMonth(req, res, next) {
+    var limit = req['limit'];
+    var offset = req['offset'];
+    if(!limit) { limit = 1000 }
+    if(!offset) { offset  = 0 }
+
     var startTimestamp = req.params['start_year'] + "-"
         + req.params['start_month'] + "-01 00:00:00";
 
-    db.any('SELECT * FROM spd_911_reports WHERE event_date BETWEEN $1 AND NOW()', [startTimestamp])
+    db.any('SELECT * FROM spd_911_reports ' +
+        'WHERE event_date BETWEEN $1 AND NOW()' +
+        'ORDER BY event_date DESC LIMIT $2 OFFSET $3', [startTimestamp, limit, offset])
         .then(function (data) {
             res.status(200).json({
                 status: 'success',
@@ -60,8 +81,15 @@ function listReportsSinceMonth(req, res, next) {
 }
 
 function listReportsInCategory(req, res, next) {
-    db.any('SELECT * FROM spd_911_reports as r JOIN incident_categories AS c ' +
-        'ON c.event_type = r.event_type WHERE c.category_id = $1', [req.params['category']])
+    var limit = req['limit'];
+    var offset = req['offset'];
+    if(!limit) { limit = 1000 }
+    if(!offset) { offset  = 0 }
+
+    db.any('SELECT * FROM spd_911_reports as r ' +
+        'JOIN incident_categories AS c ON c.event_type = r.event_type ' +
+        'WHERE c.category_id = $1' +
+        'ORDER BY event_date DESC LIMIT $2 OFFSET $3', [req.params['category'], limit, offset])
         .then(function (data) {
             res.status(200).json({
                 status: 'success',
@@ -75,8 +103,14 @@ function listReportsInCategory(req, res, next) {
 }
 
 function getReportsForNeighborhood(req, res, next) {
+    var limit = req['limit'];
+    var offset = req['offset'];
+    if(!limit) { limit = 1000 };
+    if(!offset) { offset  = 0 };
+
     db.any('SELECT * FROM spd_911_reports' +
-        'WHERE neighborhood = $1', [req.params['neighborhood']])
+        'WHERE neighborhood = $1 ORDER BY event_date DESC ' +
+        'LIMIT $2 OFFSET $3', [req.params['neighborhood'],limit, offset])
         .then(function (data) {
             res.status(200).json({
                 status: 'success',
@@ -90,7 +124,13 @@ function getReportsForNeighborhood(req, res, next) {
 }
 
 function countByCategoryNeighborhoodAndMonth(req, res, next) {
-/*    db.any('WHILE y_month <= EXTRACT(CURDATE()) LOOP ' +
+/*
+         var limit = req['limit'];
+         var offset = req['offset'];
+         if(!limit) { limit = 1000 };
+         if(!offset) { offset  = 0 };
+
+    db.any('WHILE y_month <= EXTRACT(CURDATE()) LOOP ' +
         'SELECT ADD_DATE((SELECT MIN(call_time) FROM spd_911_reports), ' +
         'INTERVAL 1 MONTH) AS y_month, neighborhood, event_type, ' +
         'COUNT(DISTINCT event_id) as num_events ' +
