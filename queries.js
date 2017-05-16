@@ -2,7 +2,7 @@ var promise = require('bluebird');
 
 var options = {
     promiseLib: promise
-}
+};
 
 var pgp = require('pg-promise')(options);
 
@@ -10,10 +10,10 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/sp
 var db = pgp(connectionString);
 
 function listAllReports(req, res, next) {
-    var limit = req['limit'];
-    var offset = req['offset'];
-    if(!limit) { limit = 1000 };
-    if(!offset) { offset  = 0 };
+    var limit = req.params['limit'];
+    var offset = req.params['offset'];
+    if(!limit) { limit = 1000 }
+    if(!offset) { offset  = 0 }
 
     db.any('SELECT * FROM spd_911_reports ' +
         'ORDER BY event_time DESC LIMIT $1 OFFSET $2', [limit, offset])
@@ -21,7 +21,7 @@ function listAllReports(req, res, next) {
             res.status(200).json({
                     status: 'success',
                     data: data,
-                    message: 'Returned all 911 Reports.'
+                    message: 'Returned requested reports successfully.'
             });
         })
         .catch(function (err) {
@@ -35,8 +35,8 @@ function filterReportsByMonth(req, res, next) {
     var endTimestamp = req.params['end_year'] + "-"
         + req.params['end_month'] + "-31 23:59:59";
 
-    var limit = req['limit'];
-    var offset = req['offset'];
+    var limit = req.params['limit'];
+    var offset = req.params['offset'];
     if(!limit) { limit = 1000 }
     if(!offset) { offset  = 0 }
 
@@ -57,8 +57,8 @@ function filterReportsByMonth(req, res, next) {
 
 
 function listReportsSinceMonth(req, res, next) {
-    var limit = req['limit'];
-    var offset = req['offset'];
+    var limit = req.params['limit'];
+    var offset = req.params['offset'];
     if(!limit) { limit = 1000 }
     if(!offset) { offset  = 0 }
 
@@ -81,8 +81,8 @@ function listReportsSinceMonth(req, res, next) {
 }
 
 function listReportsInCategory(req, res, next) {
-    var limit = req['limit'];
-    var offset = req['offset'];
+    var limit = req.params['limit'];
+    var offset = req.params['offset'];
     if(!limit) { limit = 1000 }
     if(!offset) { offset  = 0 }
 
@@ -103,10 +103,10 @@ function listReportsInCategory(req, res, next) {
 }
 
 function getReportsForNeighborhood(req, res, next) {
-    var limit = req['limit'];
-    var offset = req['offset'];
-    if(!limit) { limit = 1000 };
-    if(!offset) { offset  = 0 };
+    var limit = req.params['limit'];
+    var offset = req.params['offset'];
+    if(!limit) { limit = 1000 }
+    if(!offset) { offset  = 0 }
 
     db.any('SELECT * FROM spd_911_reports' +
         'WHERE neighborhood = $1 ORDER BY event_time DESC ' +
@@ -125,8 +125,8 @@ function getReportsForNeighborhood(req, res, next) {
 
 function countByCategoryNeighborhoodAndMonth(req, res, next) {
 /*
-         var limit = req['limit'];
-         var offset = req['offset'];
+         var limit = req.params['limit'];
+         var offset = req.params['offset'];
          if(!limit) { limit = 1000 };
          if(!offset) { offset  = 0 };
 
