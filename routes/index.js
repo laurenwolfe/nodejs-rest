@@ -1,5 +1,5 @@
 var express = require('express');
-var app = express()
+var app = express();
 var router = express.Router();
 
 var db = require("../queries");
@@ -23,9 +23,9 @@ router.get('/reports/start/:start_month/:start_year/end/:end_month/:end_year/lim
 router.get("/reports/start/:start_month/:start_year/limit/:limit/offset/:offset", db.listReportsSinceMonth);
 // GTG: https://sbnodeserver.herokuapp.com/reports/categories/5/limit/10/offset/10
 router.get('/reports/categories/:category/limit/:limit/offset/:offset', db.listReportsInCategory);
-//
+// 
 router.get('/reports/neighborhoods/:neighborhood/limit/:limit/offset/:offset', db.getReportsForNeighborhood);
 
-router.get('/reports/countByCategoryNeighborhoodAndMonth/limit/:limit/offset/:offset', db.countByCategoryNeighborhoodAndMonth);
+//router.get('/reports/countByCategoryNeighborhoodAndMonth/limit/:limit/offset/:offset', db.countByCategoryNeighborhoodAndMonth);
 
 module.exports = router;

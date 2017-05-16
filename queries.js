@@ -1,19 +1,15 @@
 var promise = require('bluebird');
-var moment = require('moment');
-var csv = require('fast-csv');
+// var moment = require('moment');
+// var csv = require('fast-csv');
 var fs = require("fs");
-moment.format();
 
 var options = {
     promiseLib: promise
 };
 
 var pgp = require('pg-promise')(options);
-
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/spd_db';
 var db = pgp(connectionString);
-
-to_timestamp();
 
 function listAllReports(req, res, next) {
     var limit = req.params['limit'];
@@ -60,7 +56,6 @@ function filterReportsByMonth(req, res, next) {
             return next(err);
     });
 }
-
 
 function listReportsSinceMonth(req, res, next) {
     var limit = req.params['limit'];
@@ -129,51 +124,11 @@ function getReportsForNeighborhood(req, res, next) {
     });
 }
 
-function to_timestamp(req, res) {
-    csv.fromPath("~/Desktop/spd911.csv", {headers: true})
-        .transform( function(obj) {
-            return {
-                event_time: moment(obj['Event Time'], ['M/D/YY H:MM',
-                    'M/DD/YY H:MM', 'MM/DD/YY H:MM', 'MM/D/YY H:MM',
-                    'M/D/YY HH:MM', 'M/DD/YY HH:MM', 'MM/DD/YY HH:MM',
-                    'MM/D/YY HH:MM']).valueOf()
-            };
-        })
-        .pipe(csv.createWriteStream({headers: true}))
-        .pipe(fs.createWriteStream("./data/spdout.csv", {encoding: "utf8"}));
-}
-
-function countByCategoryNeighborhoodAndMonth(req, res, next) {
-/*
-         var limit = req.params['limit'];
-         var offset = req.params['offset'];
-         if(!limit) { limit = 1000 };
-         if(!offset) { offset  = 0 };
-
-    db.any('WHILE y_month <= EXTRACT(CURDATE()) LOOP ' +
-        'SELECT ADD_DATE((SELECT MIN(call_time) FROM spd_911_reports), ' +
-        'INTERVAL 1 MONTH) AS y_month, neighborhood, event_type, ' +
-        'COUNT(DISTINCT event_id) as num_events ' +
-        'FROM spd_911_reports GROUP BY neighborhood, event_type ' +
-        'END LOOP; ')
-        .then(function (data) {
-            res.status(200).json({
-                status: 'success',
-                data: data,
-                message: 'Retrieved a list of reports by category successfully!'
-            });
-        })
-        .catch(function (err) {
-            return next(err);
-    });
-    */
-}
-
 module.exports = {
     listAllReports: listAllReports,
     filterReportsByMonth: filterReportsByMonth,
     listReportsSinceMonth: listReportsSinceMonth,
     listReportsInCategory: listReportsInCategory,
-    getReportsForNeighborhood: getReportsForNeighborhood,
-    countByCategoryNeighborhoodAndMonth: countByCategoryNeighborhoodAndMonth
+    getReportsForNeighborhood: getReportsForNeighborhood //,
+    //countByCategoryNeighborhoodAndMonth: countByCategoryNeighborhoodAndMonth
 };
