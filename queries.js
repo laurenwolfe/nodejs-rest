@@ -23,7 +23,6 @@ function listAllReports(req, res, next) {
     });
 }
 
-
 function filterReportsByMonth(req, res, next) {
     var startTimestamp = req.params['start_year'] + "-"
         + req.params['start_month'] + "-01 00:00:00";
@@ -90,8 +89,7 @@ function getReportsForNeighborhood(req, res, next) {
     });
 }
 
-
-function countByCategoryNeighborhoodAndMonth() {
+function countByCategoryNeighborhoodAndMonth(req, res, next) {
 /*    db.any('WHILE y_month <= EXTRACT(CURDATE()) LOOP ' +
         'SELECT ADD_DATE((SELECT MIN(call_time) FROM spd_911_reports), ' +
         'INTERVAL 1 MONTH) AS y_month, neighborhood, event_type, ' +
