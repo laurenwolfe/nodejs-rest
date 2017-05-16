@@ -16,7 +16,7 @@ function listAllReports(req, res, next) {
     if(!offset) { offset  = 0 };
 
     db.any('SELECT * FROM spd_911_reports ' +
-        'ORDER BY event_date DESC LIMIT $1 OFFSET $2', [limit, offset])
+        'ORDER BY event_time DESC LIMIT $1 OFFSET $2', [limit, offset])
         .then(function (data) {
             res.status(200).json({
                     status: 'success',
@@ -41,8 +41,8 @@ function filterReportsByMonth(req, res, next) {
     if(!offset) { offset  = 0 }
 
     db.any('SELECT * FROM spd_911_reports ' +
-        'WHERE event_date BETWEEN $1 AND $2' +
-        'ORDER BY event_date DESC LIMIT $3 OFFSET $4', [startTimestamp, endTimestamp, limit, offset])
+        'WHERE event_time BETWEEN $1 AND $2' +
+        'ORDER BY event_time DESC LIMIT $3 OFFSET $4', [startTimestamp, endTimestamp, limit, offset])
         .then(function (data) {
             res.status(200).json({
                 status: 'success',
@@ -66,8 +66,8 @@ function listReportsSinceMonth(req, res, next) {
         + req.params['start_month'] + "-01 00:00:00";
 
     db.any('SELECT * FROM spd_911_reports ' +
-        'WHERE event_date BETWEEN $1 AND NOW()' +
-        'ORDER BY event_date DESC LIMIT $2 OFFSET $3', [startTimestamp, limit, offset])
+        'WHERE event_time BETWEEN $1 AND NOW()' +
+        'ORDER BY event_time DESC LIMIT $2 OFFSET $3', [startTimestamp, limit, offset])
         .then(function (data) {
             res.status(200).json({
                 status: 'success',
@@ -89,7 +89,7 @@ function listReportsInCategory(req, res, next) {
     db.any('SELECT * FROM spd_911_reports as r ' +
         'JOIN incident_categories AS c ON c.event_type = r.event_type ' +
         'WHERE c.category_id = $1' +
-        'ORDER BY event_date DESC LIMIT $2 OFFSET $3', [req.params['category'], limit, offset])
+        'ORDER BY event_time DESC LIMIT $2 OFFSET $3', [req.params['category'], limit, offset])
         .then(function (data) {
             res.status(200).json({
                 status: 'success',
@@ -109,7 +109,7 @@ function getReportsForNeighborhood(req, res, next) {
     if(!offset) { offset  = 0 };
 
     db.any('SELECT * FROM spd_911_reports' +
-        'WHERE neighborhood = $1 ORDER BY event_date DESC ' +
+        'WHERE neighborhood = $1 ORDER BY event_time DESC ' +
         'LIMIT $2 OFFSET $3', [req.params['neighborhood'],limit, offset])
         .then(function (data) {
             res.status(200).json({
