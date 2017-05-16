@@ -108,7 +108,7 @@ function getReportsForNeighborhood(req, res, next) {
     if(!limit) { limit = 1000 }
     if(!offset) { offset  = 0 }
 
-    db.any('SELECT * FROM spd_911_reports' +
+    db.any('SELECT * FROM spd_911_reports ' +
         'WHERE neighborhood = $1 ORDER BY event_time DESC ' +
         'LIMIT $2 OFFSET $3', [req.params['neighborhood'],limit, offset])
         .then(function (data) {
