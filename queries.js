@@ -1,4 +1,8 @@
 var promise = require('bluebird');
+var moment = require('moment');
+var csv = require('fast-csv');
+var fs = require("fs");
+moment.format();
 
 var options = {
     promiseLib: promise
@@ -8,6 +12,8 @@ var pgp = require('pg-promise')(options);
 
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/spd_db';
 var db = pgp(connectionString);
+
+to_timestamp();
 
 function listAllReports(req, res, next) {
     var limit = req.params['limit'];
@@ -121,6 +127,20 @@ function getReportsForNeighborhood(req, res, next) {
         .catch(function (err) {
             return next(err);
     });
+}
+
+function to_timestamp(req, res) {
+    csv.fromPath("~/Desktop/spd911.csv", {headers: true})
+        .transform( function(obj) {
+            return {
+                event_time: moment(obj['Event Time'], ['M/D/YY H:MM',
+                    'M/DD/YY H:MM', 'MM/DD/YY H:MM', 'MM/D/YY H:MM',
+                    'M/D/YY HH:MM', 'M/DD/YY HH:MM', 'MM/DD/YY HH:MM',
+                    'MM/D/YY HH:MM']).valueOf()
+            };
+        })
+        .pipe(csv.createWriteStream({headers: true}))
+        .pipe(fs.createWriteStream("./data/spdout.csv", {encoding: "utf8"}));
 }
 
 function countByCategoryNeighborhoodAndMonth(req, res, next) {

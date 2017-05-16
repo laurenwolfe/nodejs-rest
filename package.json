@@ -13,6 +13,8 @@
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "jade": "^1.11.0",
+    "moment": "^2.18.1",
+    "fast-csv": "^2.4.0",
     "pg-promise": "^5.7.0"
   },
   "repository": "https://git.heroku.com/sbnodeserver.git"
