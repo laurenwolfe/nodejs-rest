@@ -27,7 +27,7 @@ router.use(function(req, res, next) {
     next();
 });
 
-app.listen(5000);
+app.listen(process.env.PORT || 5000);
 
 module.exports = {
     app: app,
