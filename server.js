@@ -2,7 +2,7 @@ var http = require("http");
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var router = express.Router()
+var router = express.Router();
 var index = require('./routes/index');
 
 // view engine setup
