@@ -2,6 +2,7 @@ DROP TABLE spd_911_reports;
 DROP TABLE incident_categories;
 DROP TABLE tracts_neighborhood_mapping;
 DROP TABLE test_table;
+DROP TABLE housing;
 
 CREATE TABLE IF NOT EXISTS spd_911_reports (
     event_id        BIGINT          PRIMARY KEY NOT NULL,
@@ -22,4 +23,14 @@ CREATE TABLE IF NOT EXISTS incident_categories (
 CREATE TABLE IF NOT EXISTS tracts_neighborhood_mapping (
     census_tract NUMERIC PRIMARY KEY NOT NULL,
     neighborhood VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS housing
+(
+    neighborhood VARCHAR(100),
+    year_mo VARCHAR(7),
+    year SMALLINT,
+    month SMALLINT,
+    price INTEGER,
+    type VARCHAR(6)
 );
