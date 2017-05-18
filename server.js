@@ -12,6 +12,7 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.set('json spaces', 4);
 app.use(index);
 app.use(express.static('public'));
 
